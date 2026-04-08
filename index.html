@@ -1,66 +1,14 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CineSeek - Discover Movies</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-</head>
-<body>
-    <header class="header">
-        <div class="header-content">
-            <h1 class="logo"><i class="fas fa-film"></i> CineSeek</h1>
-            <div class="controls">
-                <div class="search-container">
-                    <i class="fas fa-search search-icon"></i>
-                    <input type="text" id="search-input" placeholder="Search movies...">
-                </div>
-                
-                <select id="genre-filter" class="dropdown">
-                    <option value="">All Genres</option>
-                    <option value="Action">Action</option>
-                    <option value="Crime">Crime</option>
-                    <option value="Drama">Drama</option>
-                    <option value="Sci-Fi">Sci-Fi</option>
-                </select>
-
-                <select id="sort-select" class="dropdown">
-                    <option value="default">Sort by</option>
-                    <option value="rating-desc">Highest Rated</option>
-                    <option value="year-desc">Newest First</option>
-                    <option value="title-asc">A-Z</option>
-                </select>
-
-                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Dark Mode">
-                    <i class="fas fa-moon"></i>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <main class="main-container">
-
-        <div id="loader" class="loader-container">
-            <div class="spinner"></div>
-            <p>Fetching amazing movies...</p>
-        </div>
-
-        <div id="movie-grid" class="movie-grid hidden">
-            
-        </div>
-
-        <div id="no-results" class="no-results hidden">
-            <i class="fas fa-ghost"></i>
-            <h2>No movies found</h2>
-            <p>Try adjusting your search or filters.</p>
-        </div>
-    </main>
-
-    <footer class="footer">
-        <p>&copy; 2024 CineSeek. Developed as a Milestone Project.</p>
-    </footer>
-
-    <script src="script.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="CineSeek - Your ultimate destination for discovering movies and TV shows." />
+    <title>CineSeek | Discover the Best of Cinema</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>
