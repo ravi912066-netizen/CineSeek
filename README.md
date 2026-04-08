@@ -5,6 +5,12 @@ CineSeek is a modern, high-end movie discovery application built with **React** 
 > [!IMPORTANT]
 > This project was upgraded to React for the **Milestone 3 Evaluation**. All core features like searching, filtering, and sorting are implemented using **Array Higher-Order Functions (HOFs)** as per the project requirements.
 
+## 🌐 Live Demo
+
+🚀 **Experience CineSeek here**: [https://ravi912066-netizen.github.io/CineSeek/](https://ravi912066-netizen.github.io/CineSeek/)
+
+---
+
 ## 🚀 Features (Milestone 3)
 
 *   **🔍 Live Search**: Real-time searching functionality with query persistence.
@@ -27,7 +33,7 @@ CineSeek is a modern, high-end movie discovery application built with **React** 
 CineSeek/
 ├── public/           # Static assets
 ├── src/
-│   ├── components/   # Reusable UI components (Header, MovieCard, etc.)
+│   ├── components/   # Reusable UI components (Navbar, MovieCard, etc.)
 │   ├── App.jsx       # Main application logic & State management
 │   ├── index.css     # Global styles & Design system
 │   └── main.jsx      # Entry point
@@ -40,7 +46,7 @@ CineSeek/
 
 1.  **Clone the repository**:
     ```bash
-    git clone https://github.com/your-username/CineSeek.git
+    git clone https://github.com/ravi912066-netizen/CineSeek.git
     ```
 2.  **Navigate to the project**:
     ```bash
