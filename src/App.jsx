@@ -4,6 +4,7 @@ import FilterBar from './components/FilterBar';
 import MovieCard from './components/MovieCard';
 import Loader from './components/Loader';
 import { Film, AlertCircle } from 'lucide-react';
+import './App.css';
 
 const API_URL = 'https://api.tvmaze.com/shows';
 
@@ -153,33 +154,6 @@ function App() {
           </main>
         )}
       </div>
-
-      <style jsx>{`
-        .grid-container {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-          gap: 2rem;
-          margin-top: 2rem;
-        }
-
-        .error-state, .no-results {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          min-height: 40vh;
-          text-align: center;
-          gap: 1rem;
-          color: var(--text-muted);
-        }
-
-        @media (max-width: 640px) {
-          .grid-container {
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1.5rem;
-          }
-        }
-      `}</style>
     </div>
   );
 }
