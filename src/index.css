@@ -1,27 +1,30 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 .app-container {
-  --primary: #e50914; /* Netflix Red */
-  --primary-hover: #f40612;
-  --bg-dark: #0f1115;
-  --bg-card: rgba(255, 255, 255, 0.05);
-  --bg-glass: rgba(20, 24, 31, 0.8);
-  --text-main: #ffffff;
-  --text-muted: #a0a0a0;
-  --accent: #00d2ff;
-  --success: #00c853;
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  /* Clean Student Brand Colors */
+  --primary: #2563eb; /* Royal Blue */
+  --primary-hover: #1d4ed8;
+  --bg-dark: #f8fafc; /* Light Grayish Blue bg */
+  --bg-card: #ffffff;
+  --text-main: #0f172a; /* Slate 900 */
+  --text-muted: #64748b; /* Slate 500 */
+  --border: #e2e8f0;
+  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --transition: 0.2s ease;
+  
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
 }
 
-.app-container[data-theme='light'] {
-  --bg-dark: #f8f9fa;
-  --bg-card: rgba(0, 0, 0, 0.05);
-  --bg-glass: rgba(255, 255, 255, 0.8);
-  --text-main: #1a1a1a;
-  --text-muted: #666666;
-  --glass-border: rgba(0, 0, 0, 0.1);
+.app-container[data-theme='dark'] {
+  --bg-dark: #0f172a;
+  --bg-card: #1e293b;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border: #334155;
+  --shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3);
 }
 
 * {
@@ -31,75 +34,51 @@
 }
 
 body {
-  font-family: 'Outfit', sans-serif;
-  background-color: var(--bg-dark);
-  color: var(--text-main);
-  line-height: 1.6;
-  transition: background-color 0.4s ease;
-  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Glassmorphism Utility */
-.glass {
-  background: var(--bg-glass);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--shadow);
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
 }
 
-/* Layout */
-.app-container {
-  min-height: 100vh;
-  padding-bottom: 3rem;
+input, select {
+  font-family: inherit;
 }
 
-/* Animations */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 1rem 0;
+}
+
+/* Base Utility Classes */
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out;
+}
+
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
+  from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
+.error-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-top: 2rem;
 }
 
-.animate-fade-in {
-  animation: fadeIn 0.6s ease-out forwards;
-}
-
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bg-dark);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--primary);
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-hover);
-}
-
-/* Common Classes */
 .btn {
   padding: 0.8rem 1.5rem;
-  border-radius: 12px;
-  border: none;
-  font-weight: 600;
-  cursor: pointer;
+  border-radius: 8px;
+  font-weight: 500;
   transition: var(--transition);
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  text-decoration: none;
 }
 
 .btn-primary {
@@ -109,27 +88,4 @@ body {
 
 .btn-primary:hover {
   background: var(--primary-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(229, 9, 20, 0.4);
-}
-
-.btn-icon {
-  background: var(--bg-card);
-  color: var(--text-main);
-  padding: 0.6rem;
-  border-radius: 50%;
-  border: 1px solid var(--glass-border);
-}
-
-.btn-icon:hover {
-  background: var(--primary);
-  color: white;
-}
-
-.btn-icon.active {
-  color: var(--primary);
-}
-
-.btn-icon.active:hover {
-  color: white;
 }

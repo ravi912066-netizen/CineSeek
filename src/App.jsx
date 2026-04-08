@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Navbar from './components/Navbar';
 import MovieCard from './components/MovieCard';
 import Loader from './components/Loader';
-import { Film, AlertCircle } from 'lucide-react';
+import { Film, AlertCircle, Bookmark } from 'lucide-react';
 import './App.css';
 
 const API_URL = 'https://api.tvmaze.com/shows';
@@ -19,22 +19,21 @@ function App() {
     return JSON.parse(localStorage.getItem('cineFavorites')) || [];
   });
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('cineTheme') || 'dark';
+    return localStorage.getItem('cineTheme') || 'light'; // Default to light for a cleaner student look
   });
 
-  // --- Theme Effect ---
+  // --- Effects ---
   useEffect(() => {
     localStorage.setItem('cineTheme', theme);
   }, [theme]);
 
-  // --- Fetch Data ---
   const fetchMovies = async () => {
     setLoading(true);
     try {
       const response = await fetch(API_URL);
-      if (!response.ok) throw new Error('API connection failed');
+      if (!response.ok) throw new Error('Could not connect to the API server.');
       const data = await response.json();
-      setAllMovies(data.slice(0, 100));
+      setAllMovies(data.slice(0, 100)); // Limit for performance
       setError(null);
     } catch (err) {
       setError(err.message);
@@ -47,51 +46,51 @@ function App() {
     fetchMovies();
   }, []);
 
-  // --- Extract Genres (using reduce HOF) ---
+  // --- HOF Logic (Milestone 3 Core Requirement) ---
+
+  // 1. Dynamic Genre Extraction using reduce()
   const genres = useMemo(() => {
-    const allGenres = allMovies.reduce((acc, movie) => {
-      if (movie.genres) {
-        movie.genres.forEach(g => {
-          if (!acc.includes(g)) acc.push(g);
-        });
-      }
+    return allMovies.reduce((acc, movie) => {
+      movie.genres?.forEach(g => {
+        if (!acc.includes(g)) acc.push(g);
+      });
       return acc;
-    }, []);
-    return allGenres.sort();
+    }, []).sort();
   }, [allMovies]);
 
-  // --- Filtering & Sorting (using HOFs) ---
+  // 2. Filtering & Sorting using filter() and sort()
   const displayMovies = useMemo(() => {
+    // Stage 1: Filter
     let result = allMovies.filter(movie => {
       const matchesSearch = movie.name.toLowerCase().includes(searchQuery.toLowerCase().trim());
-      const matchesGenre = selectedGenre === '' || (movie.genres && movie.genres.includes(selectedGenre));
+      const matchesGenre = selectedGenre === '' || movie.genres?.includes(selectedGenre);
       return matchesSearch && matchesGenre;
     });
 
-    result.sort((a, b) => {
-      const ratingA = a.rating?.average || 0;
-      const ratingB = b.rating?.average || 0;
-      const yearA = a.premiered ? parseInt(a.premiered.substring(0, 4)) : 0;
-      const yearB = b.premiered ? parseInt(b.premiered.substring(0, 4)) : 0;
-
-      switch (sortBy) {
-        case 'rating-desc': return ratingB - ratingA;
-        case 'year-desc': return yearB - yearA;
-        case 'title-asc': return a.name.localeCompare(b.name);
-        default: return 0;
-      }
-    });
+    // Stage 2: Sort
+    if (sortBy !== 'default') {
+      result.sort((a, b) => {
+        if (sortBy === 'rating-desc') return (b.rating?.average || 0) - (a.rating?.average || 0);
+        if (sortBy === 'year-desc') {
+          const yearA = a.premiered ? parseInt(a.premiered.substring(0, 4)) : 0;
+          const yearB = b.premiered ? parseInt(b.premiered.substring(0, 4)) : 0;
+          return yearB - yearA;
+        }
+        if (sortBy === 'title-asc') return a.name.localeCompare(b.name);
+        return 0;
+      });
+    }
 
     return result;
   }, [allMovies, searchQuery, selectedGenre, sortBy]);
 
   // --- Interactions ---
   const toggleFavorite = (id) => {
-    const newFavorites = favorites.includes(id)
+    const updated = favorites.includes(id)
       ? favorites.filter(favId => favId !== id)
       : [...favorites, id];
-    setFavorites(newFavorites);
-    localStorage.setItem('cineFavorites', JSON.stringify(newFavorites));
+    setFavorites(updated);
+    localStorage.setItem('cineFavorites', JSON.stringify(updated));
   };
 
   const toggleTheme = () => {
@@ -113,22 +112,28 @@ function App() {
         favoritesCount={favorites.length}
       />
 
-      <div className="main-content">
-        <div className="wrapper" style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 2rem' }}>
+      <main className="main-content">
+        <div className="wrapper" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1.5rem' }}>
           {loading ? (
             <Loader />
           ) : error ? (
-            <div className="error-state animate-fade-in">
-              <AlertCircle size={48} color="var(--primary)" />
-              <h2>Oops! Something went wrong</h2>
-              <p>{error}</p>
-              <button className="btn btn-primary" onClick={fetchMovies}>Try Again</button>
+            <div className="error-state animate-fade-in shadow-sm">
+              <AlertCircle size={48} color="#ef4444" style={{ marginBottom: '1rem' }} />
+              <h2 style={{ marginBottom: '0.5rem' }}>Connection Problem</h2>
+              <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem' }}>{error}</p>
+              <button className="btn btn-primary" onClick={fetchMovies}>Try Reconnecting</button>
             </div>
           ) : (
-            <main>
+            <>
               <div className="section-header">
-                <h2>{searchQuery ? `Search Results for "${searchQuery}"` : selectedGenre ? `${selectedGenre} Shows` : 'Trending Now'}</h2>
-                <span className="results-count">{displayMovies.length} items found</span>
+                <div>
+                  <h2>{selectedGenre ? `${selectedGenre} Shows` : searchQuery ? 'Search Results' : 'Explore Movies'}</h2>
+                  <p className="results-text">Showing {displayMovies.length} movies based on your filters</p>
+                </div>
+                <div className="stats-badge">
+                  <Bookmark size={16} />
+                  <span>{allMovies.length} Total</span>
+                </div>
               </div>
 
               {displayMovies.length > 0 ? (
@@ -144,49 +149,75 @@ function App() {
                 </div>
               ) : (
                 <div className="no-results animate-fade-in">
-                  <Film size={64} style={{ opacity: 0.2, marginBottom: '1rem' }} />
-                  <h3>No movies found</h3>
-                  <p>Try adjusting your search or filters.</p>
+                  <Film size={64} style={{ opacity: 0.1, marginBottom: '1rem' }} />
+                  <h3>No matches found</h3>
+                  <p>Try changing your filters or searching for something else.</p>
                 </div>
               )}
-            </main>
+            </>
           )}
         </div>
-      </div>
+      </main>
+
+      <footer className="footer">
+        <div className="wrapper" style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem 1.5rem', textAlign: 'center' }}>
+          <p>&copy; 2024 CineSeek - Milestone 3 Project submission</p>
+          <p style={{ fontSize: '0.8rem', opacity: 0.6, marginTop: '0.5rem' }}>Built with React & TVMaze API</p>
+        </div>
+      </footer>
 
       <style jsx>{`
         .main-content {
-          padding-top: 100px; /* Space for sticky navbar */
+          padding-top: 2rem;
           padding-bottom: 4rem;
+          min-height: calc(100vh - 72px - 140px);
         }
 
         .section-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-end;
+          align-items: center;
           margin-bottom: 2rem;
-          padding-bottom: 1rem;
-          border-bottom: 1px solid var(--glass-border);
+          padding-bottom: 1.5rem;
+          border-bottom: 1px solid var(--border);
         }
 
         .section-header h2 {
-          font-size: 1.5rem;
-          font-weight: 600;
+          font-size: 1.75rem;
+          font-weight: 700;
         }
 
-        .results-count {
-          font-size: 0.9rem;
+        .results-text {
+          font-size: 0.95rem;
+          color: var(--text-muted);
+          margin-top: 0.25rem;
+        }
+
+        .stats-badge {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          background: var(--bg-card);
+          padding: 8px 16px;
+          border-radius: 100px;
+          border: 1px solid var(--border);
+          font-size: 0.85rem;
+          font-weight: 600;
           color: var(--text-muted);
         }
 
-        @media (max-width: 768px) {
-          .main-content {
-            padding-top: 80px;
-          }
+        .footer {
+          background: var(--bg-card);
+          border-top: 1px solid var(--border);
+          color: var(--text-muted);
+          font-size: 0.9rem;
+        }
+
+        @media (max-width: 640px) {
           .section-header {
             flex-direction: column;
             align-items: flex-start;
-            gap: 0.5rem;
+            gap: 1rem;
           }
         }
       `}</style>

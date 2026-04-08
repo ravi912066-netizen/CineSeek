@@ -14,18 +14,8 @@ const Navbar = ({
   genres,
   favoritesCount
 }) => {
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   return (
-    <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
+    <nav className="navbar">
       <div className="nav-container">
         {/* Logo */}
         <div className="nav-logo" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
@@ -40,7 +30,7 @@ const Navbar = ({
           <Search className="nav-search-icon" size={18} />
           <input 
             type="text" 
-            placeholder="Search movies, tv shows..." 
+            placeholder="Search for movies or shows..." 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -54,6 +44,7 @@ const Navbar = ({
               <select 
                 value={selectedGenre} 
                 onChange={(e) => setSelectedGenre(e.target.value)}
+                aria-label="Filter by Genre"
               >
                 <option value="">All Genres</option>
                 {genres.map(genre => (
@@ -67,6 +58,7 @@ const Navbar = ({
               <select 
                 value={sortBy} 
                 onChange={(e) => setSortBy(e.target.value)}
+                aria-label="Sort Movies"
               >
                 <option value="default">Sort By</option>
                 <option value="rating-desc">Highest Rated</option>
@@ -77,13 +69,13 @@ const Navbar = ({
           </div>
 
           <div className="fav-badge">
-            <button className="nav-theme-btn" aria-label="Favorites">
-              <Heart size={20} fill={favoritesCount > 0 ? "var(--primary)" : "none"} color={favoritesCount > 0 ? "var(--primary)" : "currentColor"} />
+            <button className="nav-theme-btn" aria-label="Favorites" title="My Favorites">
+              <Heart size={20} fill={favoritesCount > 0 ? "#ef4444" : "none"} color={favoritesCount > 0 ? "#ef4444" : "currentColor"} />
               {favoritesCount > 0 && <span className="fav-count">{favoritesCount}</span>}
             </button>
           </div>
 
-          <button onClick={toggleTheme} className="nav-theme-btn" aria-label="Toggle Theme">
+          <button onClick={toggleTheme} className="nav-theme-btn" aria-label="Toggle Theme" title="Switch Theme">
             {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
           </button>
         </div>
