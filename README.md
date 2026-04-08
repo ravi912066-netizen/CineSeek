@@ -7,7 +7,7 @@ CineSeek is a modern, high-end movie discovery application built with **React** 
 
 ## 🌐 Live Demo
 
-🚀 **Experience CineSeek here**: [https://ravi912066-netizen.github.io/CineSeek/](https://ravi912066-netizen.github.io/CineSeek/)
+🚀 **Experience CineSeek here**: [https://cineseek-app.vercel.app/](https://cineseek-app.vercel.app/)
 
 ---
 
