@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
-:root {
+.app-container {
   --primary: #e50914; /* Netflix Red */
   --primary-hover: #f40612;
   --bg-dark: #0f1115;
@@ -15,7 +15,7 @@
   --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
-[data-theme='light'] {
+.app-container[data-theme='light'] {
   --bg-dark: #f8f9fa;
   --bg-card: rgba(0, 0, 0, 0.05);
   --bg-glass: rgba(255, 255, 255, 0.8);
